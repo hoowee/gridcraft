@@ -131,6 +131,16 @@ pub enum Icon {
     OpenFolder,
     Info,
     Print,
+    /// 四算表 AutoFix Numbers: a list of numbers with a check mark.
+    SisuanFix,
+    /// 四算表 Increase Number Level: a list of numbers with a plus.
+    SisuanAdd,
+    /// 四算表 Decrease Number Level: a list of numbers with a minus.
+    SisuanDec,
+    /// 四算表 Toggle Next Level: an indented outline with a plus (show detail).
+    SisuanOpen,
+    /// 四算表 Toggle All Subordinates: an indented outline with a minus (hide detail).
+    SisuanClose,
 }
 
 struct G<'a> {
@@ -713,6 +723,34 @@ pub fn paint(p: &Painter, rect: Rect, icon: Icon, c: Color32) {
             g.line(&[(4.0, 11.5), (1.5, 11.5), (1.5, 5.5), (14.5, 5.5), (14.5, 11.5), (12.0, 11.5)], c, 1.1);
             g.line(&[(4.5, 9.0), (4.5, 14.5), (11.5, 14.5), (11.5, 9.0), (4.5, 9.0)], c, 1.1);
             g.circle(12.3, 7.6, 0.6, Some(c), None);
+        }
+        // 四算表 (Sisuan) tools: a numbering list with the mark the command carries.
+        Icon::SisuanFix => {
+            for y in [3.0, 6.5, 10.0] {
+                g.stroke(&[(1.5, y), (8.5, y)], c);
+            }
+            g.line(&[(9.0, 9.5), (11.0, 12.0), (14.5, 7.0)], GREEN, 1.6);
+        }
+        Icon::SisuanAdd | Icon::SisuanDec => {
+            for y in [3.0, 6.5, 10.0, 13.0] {
+                g.stroke(&[(1.5, y), (8.5, y)], c);
+            }
+            let bar = matches!(icon, Icon::SisuanAdd);
+            if bar {
+                g.line(&[(12.0, 6.0), (12.0, 12.0)], RED, 1.6);
+            }
+            g.line(&[(9.0, 9.0), (15.0, 9.0)], RED, 1.6);
+        }
+        Icon::SisuanOpen | Icon::SisuanClose => {
+            g.stroke(&[(1.5, 2.5), (7.0, 2.5)], c);
+            for (x, y) in [(3.5, 6.0), (5.5, 9.5), (7.5, 13.0)] {
+                g.stroke(&[(x, y), (10.0, y)], c);
+            }
+            let plus = matches!(icon, Icon::SisuanOpen);
+            if plus {
+                g.line(&[(12.5, 10.0), (12.5, 15.0)], GREEN, 1.6);
+            }
+            g.line(&[(10.0, 12.5), (15.0, 12.5)], if plus { GREEN } else { RED }, 1.6);
         }
     }
 }

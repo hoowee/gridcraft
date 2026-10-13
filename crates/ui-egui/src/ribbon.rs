@@ -10,7 +10,7 @@ use crate::keytips::keytip_table;
 use crate::theme::{self, Tokens};
 use crate::widgets::{big_button, color_palette, icon_button, small_button, split_button, toggle_button};
 
-pub const TABS: &[&str] = &["Home", "Insert", "Draw", "Page Layout", "Formulas", "Data", "Review", "View", "Automate"];
+pub const TABS: &[&str] = &["Home", "Insert", "Draw", "Page Layout", "Formulas", "Data", "Review", "View", "Automate", "Sisuan"];
 
 /// macOS draws the window into the title bar (`with_fullsize_content_view`) and AppKit paints the
 /// traffic lights itself, centred in its standard 28 pt title-bar band. Moving them would take
@@ -243,6 +243,7 @@ pub fn show(app: &mut SheetApp, ui: &mut Ui) {
                             "Review" => review(app, ui),
                             "View" => view(app, ui),
                             "Automate" => automate(app, ui),
+                            "Sisuan" => sisuan(app, ui),
                             "Table Design" => table_design(app, ui),
                             "Chart Design" => chart_design(app, ui),
                             crate::paper_view::TAB => crate::paper_view::ribbon_tab(app, ui),
@@ -2237,6 +2238,34 @@ fn view(app: &mut SheetApp, ui: &mut Ui) {
             },
         );
     });
+}
+
+/// 四算表 (Sisuan): this fork's cost-estimate worksheet tools over the commands in
+/// `crates/engine/src/cmd/custom.rs` — repair the numbering, fill the default formulas, fold the
+/// levels (ported from VibeOffice Ledger).
+fn sisuan(app: &mut SheetApp, ui: &mut Ui) {
+    if big_button(ui, Icon::SisuanFix, "AutoFix\nNumbers", "Fix multi-level numbers in the selection", false).clicked() {
+        act(app, "sisuan.autoFix", json!({}));
+    }
+    ui.vertical(|ui| {
+        if small_button(ui, Icon::SisuanAdd, "Increase Level", "Increase the number level", false).clicked() {
+            act(app, "sisuan.increaseLevel", json!({}));
+        }
+        if small_button(ui, Icon::SisuanDec, "Decrease Level", "Decrease the number level", false).clicked() {
+            act(app, "sisuan.decreaseLevel", json!({}));
+        }
+    });
+    sep(ui);
+    if big_button(ui, Icon::Fx, "Write Default\nFormulas", "Write default formulas by the row-4 headers", false).clicked() {
+        act(app, "sisuan.writeFormulas", json!({}));
+    }
+    sep(ui);
+    if big_button(ui, Icon::SisuanOpen, "Toggle Next\nLevel", "Show/hide the next level", false).clicked() {
+        act(app, "sisuan.toggleNextLevel", json!({}));
+    }
+    if big_button(ui, Icon::SisuanClose, "Toggle All\nSubordinates", "Show/hide all subordinate levels", false).clicked() {
+        act(app, "sisuan.toggleAllSubordinates", json!({}));
+    }
 }
 
 fn automate(app: &mut SheetApp, ui: &mut Ui) {

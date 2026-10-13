@@ -402,6 +402,20 @@ pub(super) fn translate(text: &str) -> Option<&'static str> {
         "Workbook calculation" => "工作簿计算",
         "Enable iterative calculation" => "启用迭代计算",
         "Calculation settings are saved with the workbook." => "计算设置随工作簿一起保存。",
+        // 四算表 (Sisuan) tools — the fork's cost-estimate commands.
+        "Sisuan" => "四算表",
+        "AutoFix\nNumbers" => "数字序号\n自动修改",
+        "Fix multi-level numbers in the selection" => "修正选区内的多级数字序号",
+        "Increase Level" => "增加一级",
+        "Increase the number level" => "为选区数字序号增加一级",
+        "Decrease Level" => "减少一级",
+        "Decrease the number level" => "为选区数字序号减少一级",
+        "Write Default\nFormulas" => "写入默认\n公式",
+        "Write default formulas by the row-4 headers" => "按第4行表头为选区写入默认公式",
+        "Toggle Next\nLevel" => "显示或隐藏\n下一层级",
+        "Show/hide the next level" => "切换当前行的下一层级显示/隐藏",
+        "Toggle All\nSubordinates" => "显示或隐藏\n所有下级",
+        "Show/hide all subordinate levels" => "切换当前行的所有下级显示/隐藏",
         _ => return None,
     })
 }
